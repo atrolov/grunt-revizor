@@ -1,0 +1,37 @@
+.b-block1-- {
+    color: red;
+    font-size: 14px;
+    background-color: aqua;
+}
+.b-block2-- {
+    font-weight: bold;
+    line-height: 16px;
+}
+#info-text-- {
+    color: red;
+    font-size: 22px;
+    font-weight: bold;
+}
+div .b-block3-- {
+    color: red;
+}
+.b-block4--.b-block5-- {
+    font-weight: bold;
+}
+.b-block6-- .b-block7-- {
+    font-weight: bold;
+}
+div.b-block9-- {
+    color: red;
+}
+#tabmenu-- {
+  color: red;
+}
+.b-tabs__head-- {}
+.b-tabs__names-- {}
+.b-tabs__title-block-- {}
+.b-tabs__selected-- {}
+.b-tabs__notselected-- {}
+.b-inline-- {}
+.b-link-- {}
+.b-tabs__title-- {}
