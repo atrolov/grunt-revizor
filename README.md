@@ -1,7 +1,7 @@
 # grunt-revizor
 
 > Grunt plugin for compression CSS classes and identifiers.
-Exmaple: `.b-tabmenu--item__active--` -> `.zS`, `#success_info--` -> `.e6`
+Exmaple: `.b-tabmenu__item--active__` -> `.zS`, `#success_info__` -> `.e6`
 
 ## Getting Started
 This plugin requires Grunt `~0.4.5`
@@ -9,7 +9,7 @@ This plugin requires Grunt `~0.4.5`
 If you haven't used [Grunt](http://gruntjs.com/) before, be sure to check out the [Getting Started](http://gruntjs.com/getting-started) guide, as it explains how to create a [Gruntfile](http://gruntjs.com/sample-gruntfile) as well as install and use Grunt plugins. Once you're familiar with that process, you may install this plugin with this command:
 
 ```shell
-npm install grunt-revizor --save-dev
+npm install grunt-revizor __save-dev
 ```
 
 Once the plugin has been installed, it may be enabled inside your Gruntfile with this line of JavaScript:
@@ -22,10 +22,10 @@ grunt.loadNpmTasks('grunt-revizor');
 
 #### options.namePrefix
 Type: `String`
-Default value: `'--'`
+Default value: `'__'`
 
 Prefix to which end the class names and identifiers to be compressed
-Exmaple: `.b-tabmenu--item__active--` -> `.zS`
+Exmaple: `.b-tabmenu__item--active__` -> `.zS`
 
 #### options.compressFilePrefix
 Type: `String`
@@ -80,7 +80,7 @@ grunt.initConfig({
 });
 ```
 The result is a new compressed files in the same directory specified in the src, with a standard prefix.
-Name compress example: `.b-tabmenu--item__active--` -> `.zS`
+Name compress example: `.b-tabmenu__item--active__` -> `.zS`
 Example: `test/css/style1-min.css`, `test/css/style2-min.css`, `test/html/index-min.html`
 
 
@@ -118,7 +118,7 @@ Example: `build/test/css/style1-min.css`, `build/test/css/style2-min.css`, `test
 grunt.initConfig({
   revizor: {
     options: {
-        namePrefix: '__',
+        namePrefix: '--',
         compressFilePrefix: '.min'
     },
     src: ['test/css/*.css', 'test/html/*.html', 'test/js/*.js'],
@@ -126,8 +126,8 @@ grunt.initConfig({
   },
 });
 ```
-The result is a new compressed files in the directory `build`, with the prefix `.min`. Will compress all names that end with symbols `__`.
-Name compress example: `.b-tabmenu__item--active__` -> `.xS`
+The result is a new compressed files in the directory `build`, with the prefix `.min`. Will compress all names that end with symbols `--`.
+Name compress example: `.b-tabmenu--item__active--` -> `.xS`
 File path example: `build/style1.min.css`, `build/style2.min.css`, `build/index.min.html`
 
 ## Contributing
