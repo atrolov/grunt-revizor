@@ -34,6 +34,33 @@ Default value: `'-min'`
 The prefix for the name of the compressed file. The final name of the new file is equal to the original file name plus a prefix plus the extension of the original file.
 Example: `style1.css` -> `style-min.css`
 
+#### options.nonCssFileSelectors
+Type: `Array`
+Default value: []
+
+By default grunt-revizor minifies only classes and IDs that exist within your CSS files. We do this to avoid replace
+strings by mistake from your non-css files (like JS, PHP, HTML, etc).
+But sometimes there are CSS classes and IDs that exists only within non-css files. It happens, for example, when you 
+create a CSS ID only because you need to find that element from within a JS code. Example: `$(#some-selector)`    
+Often these selectors are not referenced in your CSS causing grunt-revizor to ignore them.
+
+Use this option to let grunt-revizor know which are the CSS class and IDs that should be minified even that it is not present in your CSS file.
+Using this option grunt-revizor can safe minify selectors inside your no-css files without make a mistake.
+
+```js
+grunt.initConfig({
+  revizor: {
+    options: {
+      nonCssFileSelectors: [
+        '#select-one',
+        '.selector-two'
+      ]
+    },
+    src: ['test/css/*.css', 'test/html/*.html', 'test/js/*.js']
+  },
+});
+```
+
 #### options.flatten
 Type: `Boolean`
 Default value: `true`

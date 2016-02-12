@@ -25,6 +25,7 @@ module.exports = function(grunt) {
     options = this.options({
       namePrefix: '__',
       flatten: true,
+      nonCssFileSelectors: [],
       compressFilePrefix: '-min'
     });
 
@@ -51,6 +52,7 @@ module.exports = function(grunt) {
       compressCssNames(fileData);
     });
 
+    compressNonCssFileNames();
     filesForCompress.forEach(function(filepath) {
       var newFileData = compressFile(filepath);
       saveCompressedFile(newFileData, filepath);
@@ -69,6 +71,15 @@ module.exports = function(grunt) {
         name = name.substring(1, name.length);
         if (compressedNames[name] === undefined) {
           compressedNames[name] = getRandomStr();
+        }
+      });
+    }
+
+    function compressNonCssFileNames () {
+      options.nonCssFileSelectors.forEach(function (selector) {
+        selector = selector.substring(1, selector.length);
+        if (compressedNames[selector] === undefined) {
+          compressedNames[selector] = getRandomStr();
         }
       });
     }
