@@ -19,6 +19,7 @@ module.exports = function(grunt) {
       destDir = this.data.dest || null,
       firstCharList,
       OtherCharsList,
+      notFound = {},
       options;
 
 
@@ -26,6 +27,7 @@ module.exports = function(grunt) {
       namePrefix: '__',
       flatten: true,
       nonCssFileSelectors: [],
+      reportNotMinifiedSelectors: false,
       compressFilePrefix: '-min'
     });
 
@@ -93,6 +95,10 @@ module.exports = function(grunt) {
       fileData = grunt.file.read(filepath);
       namePattern = new RegExp('[A-Za-z0-9_-]+' + options.namePrefix, 'g');
       newFileData = fileData.replace(namePattern, function (name) {
+        if (options.reportNotMinifiedSelectors && !compressedNames[name] && !notFound[name]) {
+          notFound[name] = true;
+          console.log("Selector not minified: " + name);
+        }
         return compressedNames[name] ? compressedNames[name] : name;
       });
       return newFileData;

@@ -67,6 +67,16 @@ Default value: `true`
 
 Set `false` if you want to save the directory structure
 
+#### options.reportNotMinifiedSelectors
+Type: `Boolean`
+Default value: `false`
+
+Set `true` if you want to be notified about strings that match the prefix configured in `options.namePrefix` but 
+were ignored by grunt-revizor.   
+An string will be ignored when it is not found inside your CSS files nether in the array `options.nonCssFileSelectors`.   
+Read the documentation about `options.nonCssFileSelectors` for more details.
+
+
 ### Usage Examples
 
 #### Default Options
