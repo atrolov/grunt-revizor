@@ -20,7 +20,7 @@ grunt.loadNpmTasks('grunt-revizor');
 
 ### Options
 
-#### options.namePrefix
+#### options.nameSuffix
 Type: `String`
 Default value: `'__'`
 
@@ -49,7 +49,7 @@ Using this option grunt-revizor can safe minify selectors inside your no-css fil
 
 You can also use this option to minify string that are not CSS classes selectors. Be creative ;)
 
-You don't need to add the dot nor the # in the begin of the strings in this array, nor you need to add the `options.namePrefix`
+You don't need to add the dot nor the # in the begin of the strings in this array, nor you need to add the `options.nameSuffix`
 in it. The grunt-revizor is smart enough to add it for you automatically.
 
 ```js
@@ -73,7 +73,7 @@ All these strings are equivalents.
 grunt.initConfig({
   revizor: {
     options: {
-      namePrefix: '__',
+      nameSuffix: '__',
       nonCssFileSelectors: [
         '#selector',
         '.selector',
@@ -98,7 +98,7 @@ Set `false` if you want to save the directory structure
 Type: `Boolean`
 Default value: `false`
 
-Set `true` if you want to be notified about strings that match the prefix configured in `options.namePrefix` but 
+Set `true` if you want to be notified about strings that match the prefix configured in `options.nameSuffix` but 
 were ignored by grunt-revizor.   
 An string will be ignored when it is not found inside your CSS files nether in the array `options.nonCssFileSelectors`.   
 Read the documentation about `options.nonCssFileSelectors` for more details.
@@ -150,12 +150,12 @@ grunt.initConfig({
 The result is a new compressed files in the directory `build`, with a standard prefix.
 Example: `build/test/css/style1-min.css`, `build/test/css/style2-min.css`, `test/html/index-min.html`
 
-#### Custom namePrefix and filePrefix
+#### Custom nameSuffix and filePrefix
 ```js
 grunt.initConfig({
   revizor: {
     options: {
-        namePrefix: '--',
+        nameSuffix: '--',
         compressFilePrefix: '.min'
     },
     src: ['test/css/*.css', 'test/html/*.html', 'test/js/*.js'],

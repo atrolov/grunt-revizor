@@ -24,12 +24,17 @@ module.exports = function(grunt) {
 
 
     options = this.options({
-      namePrefix: '__',
+      nameSuffix: '__',
       flatten: true,
       nonCssFileSelectors: [],
       reportNotMinifiedSelectors: false,
       compressFilePrefix: '-min'
     });
+
+    if (options.namePrefix) {
+      options.nameSuffix = options.namePrefix;
+      delete options.namePrefix;
+    }
 
     function escapeRegExp(string){
       // From Mozilla Developer Network
@@ -38,7 +43,7 @@ module.exports = function(grunt) {
       return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); // $& means the whole matched string
     };
     
-    var namePrefixRegExpEscaped = escapeRegExp(options.namePrefix);
+    var nameSuffixRegExpEscaped = escapeRegExp(options.nameSuffix);
     
     firstCharList = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     OtherCharsList = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_';
@@ -75,7 +80,7 @@ module.exports = function(grunt) {
       var
         namePattern,
         result;
-      namePattern = new RegExp('(\\.|#)[A-Za-z0-9_-]+' + options.namePrefix, 'g');
+      namePattern = new RegExp('(\\.|#)[A-Za-z0-9_-]+' + options.nameSuffix, 'g');
       result = fileData.match(namePattern);
       if (result === null) { return; }
       result.forEach(function (name) {
@@ -92,9 +97,9 @@ module.exports = function(grunt) {
         selector = selector.replace(/^[\.#]/, '');
         
         // Add string suffix if it does not has yet.
-        var regExp = new RegExp(namePrefixRegExpEscaped + '$');
+        var regExp = new RegExp(nameSuffixRegExpEscaped + '$');
         if (!selector.match(regExp)) {
-          selector += options.namePrefix;
+          selector += options.nameSuffix;
         }
         
         if (compressedNames[selector] === undefined) {
@@ -110,7 +115,7 @@ module.exports = function(grunt) {
         namePattern;
 
       fileData = grunt.file.read(filepath);
-      namePattern = new RegExp('[A-Za-z0-9_-]+' + options.namePrefix, 'g');
+      namePattern = new RegExp('[A-Za-z0-9_-]+' + options.nameSuffix, 'g');
       newFileData = fileData.replace(namePattern, function (name) {
         if (options.reportNotMinifiedSelectors && !compressedNames[name] && !notFound[name]) {
           notFound[name] = true;
