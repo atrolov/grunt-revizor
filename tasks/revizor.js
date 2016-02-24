@@ -31,6 +31,15 @@ module.exports = function(grunt) {
       compressFilePrefix: '-min'
     });
 
+    function escapeRegExp(string){
+      // From Mozilla Developer Network
+      // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions?redirectlocale=en-US&redirectslug=JavaScript%2FGuide%2FRegular_Expressions
+
+      return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); // $& means the whole matched string
+    };
+    
+    var namePrefixRegExpEscaped = escapeRegExp(options.namePrefix);
+    
     firstCharList = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     OtherCharsList = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_';
 
@@ -79,7 +88,15 @@ module.exports = function(grunt) {
 
     function compressNonCssFileNames () {
       options.nonCssFileSelectors.forEach(function (selector) {
-        selector = selector.substring(1, selector.length);
+        // Remove first character if it is an dot or #.
+        selector = selector.replace(/^[\.#]/, '');
+        
+        // Add string suffix if it does not has yet.
+        var regExp = new RegExp(namePrefixRegExpEscaped + '$');
+        if (!selector.match(regExp)) {
+          selector += options.namePrefix;
+        }
+        
         if (compressedNames[selector] === undefined) {
           compressedNames[selector] = getRandomStr();
         }

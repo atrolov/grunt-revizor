@@ -47,13 +47,40 @@ Often these selectors are not referenced in your CSS causing grunt-revizor to ig
 Use this option to let grunt-revizor know which are the CSS class and IDs that should be minified even that it is not present in your CSS file.
 Using this option grunt-revizor can safe minify selectors inside your no-css files without make a mistake.
 
+You can also use this option to minify string that are not CSS classes selectors. Be creative ;)
+
+You don't need to add the dot nor the # in the begin of the strings in this array, nor you need to add the `options.namePrefix`
+in it. The grunt-revizor is smart enough to add it for you automatically.
+
 ```js
 grunt.initConfig({
   revizor: {
     options: {
       nonCssFileSelectors: [
-        '#select-one',
-        '.selector-two'
+        '#selector-one',
+        '.selector-two',
+        'selector-three',
+        'a-non-css-class-string',
+      ]
+    },
+    src: ['test/css/*.css', 'test/html/*.html', 'test/js/*.js']
+  },
+});
+```
+
+All these strings are equivalents.   
+```js
+grunt.initConfig({
+  revizor: {
+    options: {
+      namePrefix: '__',
+      nonCssFileSelectors: [
+        '#selector',
+        '.selector',
+        '.selector__',
+        '#selector__',
+        'selector__',
+        'selector',
       ]
     },
     src: ['test/css/*.css', 'test/html/*.html', 'test/js/*.js']
