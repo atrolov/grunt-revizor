@@ -19,15 +19,32 @@ module.exports = function(grunt) {
       destDir = this.data.dest || null,
       firstCharList,
       OtherCharsList,
+      notFound = {},
       options;
 
 
     options = this.options({
-      namePrefix: '__',
+      nameSuffix: '__',
       flatten: true,
+      nonCssFileSelectors: [],
+      reportNotMinifiedSelectors: false,
       compressFilePrefix: '-min'
     });
 
+    if (options.namePrefix) {
+      options.nameSuffix = options.namePrefix;
+      delete options.namePrefix;
+    }
+
+    function escapeRegExp(string){
+      // From Mozilla Developer Network
+      // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions?redirectlocale=en-US&redirectslug=JavaScript%2FGuide%2FRegular_Expressions
+
+      return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); // $& means the whole matched string
+    };
+    
+    var nameSuffixRegExpEscaped = escapeRegExp(options.nameSuffix);
+    
     firstCharList = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     OtherCharsList = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_';
 
@@ -51,6 +68,7 @@ module.exports = function(grunt) {
       compressCssNames(fileData);
     });
 
+    compressNonCssFileNames();
     filesForCompress.forEach(function(filepath) {
       var newFileData = compressFile(filepath);
       saveCompressedFile(newFileData, filepath);
@@ -62,13 +80,30 @@ module.exports = function(grunt) {
       var
         namePattern,
         result;
-      namePattern = new RegExp('(\\.|#)[A-Za-z0-9_-]+' + options.namePrefix, 'g');
+      namePattern = new RegExp('(\\.|#)[A-Za-z0-9_-]+' + options.nameSuffix, 'g');
       result = fileData.match(namePattern);
       if (result === null) { return; }
       result.forEach(function (name) {
         name = name.substring(1, name.length);
         if (compressedNames[name] === undefined) {
           compressedNames[name] = getRandomStr();
+        }
+      });
+    }
+
+    function compressNonCssFileNames () {
+      options.nonCssFileSelectors.forEach(function (selector) {
+        // Remove first character if it is an dot or #.
+        selector = selector.replace(/^[\.#]/, '');
+        
+        // Add string suffix if it does not has yet.
+        var regExp = new RegExp(nameSuffixRegExpEscaped + '$');
+        if (!selector.match(regExp)) {
+          selector += options.nameSuffix;
+        }
+        
+        if (compressedNames[selector] === undefined) {
+          compressedNames[selector] = getRandomStr();
         }
       });
     }
@@ -80,8 +115,12 @@ module.exports = function(grunt) {
         namePattern;
 
       fileData = grunt.file.read(filepath);
-      namePattern = new RegExp('[A-Za-z0-9_-]+' + options.namePrefix, 'g');
+      namePattern = new RegExp('[A-Za-z0-9_-]+' + options.nameSuffix, 'g');
       newFileData = fileData.replace(namePattern, function (name) {
+        if (options.reportNotMinifiedSelectors && !compressedNames[name] && !notFound[name]) {
+          notFound[name] = true;
+          console.log("Selector not minified: " + name);
+        }
         return compressedNames[name] ? compressedNames[name] : name;
       });
       return newFileData;

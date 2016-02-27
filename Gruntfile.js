@@ -24,7 +24,7 @@ module.exports = function(grunt) {
 
     revizor: {
       options: {
-        namePrefix: '--',
+        nameSuffix: '__',
         compressFilePrefix: '-rvz',
         flatten: false
       },
